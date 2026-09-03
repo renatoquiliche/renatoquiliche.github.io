@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Renato Quiliche — Data Scientist</title>
+<meta name="description" content="Data scientist and Ph.D. candidate in Production Engineering at PUC-Rio. Machine learning for risk, disaster management and public policy — from research prototype to distributed production pipeline.">
+<meta name="author" content="Renato J. Quiliche Altamirano">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Renato Quiliche — Data Scientist">
+<meta property="og:description" content="Machine learning for risk, disaster management and public policy — from research prototype to distributed production pipeline.">
+<meta property="og:url" content="https://renatoquiliche.github.io/">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <nav class="nav wrap" aria-label="Main">
+    <a class="brand" href="#top">RQ</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#publications">Publications</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle colour theme">
+      <span aria-hidden="true">◐</span>
+    </button>
+  </nav>
+</header>
+
+<main id="main">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero wrap" id="top">
+    <p class="eyebrow">Rio de Janeiro, Brazil</p>
+    <h1>Renato J. Quiliche Altamirano</h1>
+    <p class="role">Data Scientist &middot; Ph.D. Candidate in Production Engineering, PUC-Rio</p>
+    <p class="lede">
+      I build machine learning systems for risk, disaster management and public policy —
+      and take them from research prototype to distributed production pipeline.
+    </p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="#projects">View projects</a>
+      <a class="btn" href="assets/files/renato-quiliche-cv.pdf">Download CV</a>
+    </div>
+    <ul class="links" aria-label="Profiles">
+      <li><a href="mailto:renato.quiliche.pe@gmail.com">renato.quiliche.pe@gmail.com</a></li>
+      <li><a href="https://github.com/renatoquiliche" rel="me noopener">GitHub</a></li>
+      <li><a href="https://www.linkedin.com/in/renato-quiliche/" rel="me noopener">LinkedIn</a></li>
+    </ul>
+  </section>
+
+  <!-- ============ ABOUT ============ -->
+  <section class="section wrap" id="about">
+    <h2 class="section-title">About</h2>
+    <div class="about-grid">
+      <div class="prose">
+        <p>
+          I hold a B.Sc. in Economics from <strong>PUCP</strong> and an M.Sc. in Production Engineering
+          from <strong>PUC-Rio</strong>, where I am now a Ph.D. candidate. For the past six years I have
+          worked on the design and evaluation of public policies, programs and projects.
+        </p>
+        <p>
+          My training in Economics gave me a strong statistical foundation, which my specialization in
+          Production Engineering turned into applied data science: supervised learning, causal inference
+          and spatial analysis used to build policy proposals grounded in socioeconomic evidence.
+        </p>
+        <p>
+          More recently my work has moved toward <strong>production-oriented engineering</strong> —
+          re-implementing research models as distributed pipelines on Spark and Databricks, and building
+          automated evaluation frameworks for LLM-based systems. I work well in collaborative settings
+          where communication carries as much weight as the modelling, and I learn new tooling quickly.
+        </p>
+      </div>
+      <aside class="facts">
+        <h3>At a glance</h3>
+        <dl>
+          <div><dt>Focus</dt><dd>ML for risk &amp; policy, distributed data processing, generative AI</dd></div>
+          <div><dt>Core stack</dt><dd>Python, SQL, PySpark, Databricks, scikit-learn</dd></div>
+          <div><dt>Peer review</dt><dd>Springer Nature journals, since 2024</dd></div>
+          <div><dt>Languages</dt><dd>Spanish (native), Portuguese, English</dd></div>
+        </dl>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ============ PROJECTS ============ -->
+  <section class="section wrap" id="projects">
+    <h2 class="section-title">Projects</h2>
+
+    <div class="filters" role="group" aria-label="Filter projects by topic">
+      <button class="chip is-active" data-filter="all" type="button">All</button>
+      <button class="chip" data-filter="ml" type="button">Machine learning</button>
+      <button class="chip" data-filter="bigdata" type="button">Big data</button>
+      <button class="chip" data-filter="genai" type="button">Generative AI</button>
+      <button class="chip" data-filter="policy" type="button">Policy &amp; analytics</button>
+    </div>
+
+    <div class="cards" id="project-list">
+
+      <!-- 1 -->
+      <article class="card" data-tags="ml bigdata">
+        <div class="card-head">
+          <h3>Distributed Disaster-Risk Classification on Databricks</h3>
+          <span class="year">2026</span>
+        </div>
+        <p class="card-sub">Scaling an M.Sc. dissertation model into a production-shaped Spark pipeline</p>
+        <p>
+          Re-engineered my dissertation modelling stack as a distributed pipeline on Databricks, moving
+          from single-node Python to Spark MLlib over <strong>101K household records</strong> and
+          <strong>112 features</strong>. The pipeline chains VectorAssembler → RobustScaler →
+          GBTClassifier, with cost-sensitive class weighting for a 1.4% positive rate and hyperparameter
+          search via <code>TrainValidationSplit</code>.
+        </p>
+        <p>
+          Evaluation is imbalance-aware and computed with distributed Spark SQL aggregations
+          (MCC, G-Mean, balanced accuracy, GIBA<sub>α</sub>). The fitted <code>PipelineModel</code> is
+          persisted to Unity Catalog Volumes for reproducible reload and batch scoring.
+        </p>
+        <ul class="metrics">
+          <li><b>0.81</b><span>AUC</span></li>
+          <li><b>0.67</b><span>Sensitivity</span></li>
+          <li><b>0.83</b><span>Specificity</span></li>
+        </ul>
+        <ul class="tags">
+          <li>PySpark</li><li>Spark MLlib</li><li>Databricks</li><li>Spark SQL</li><li>Unity Catalog</li>
+        </ul>
+        <!-- TODO: add repo link once the notebook is pushed -->
+      </article>
+
+      <!-- 2 -->
+      <article class="card" data-tags="ml policy">
+        <div class="card-head">
+          <h3>Artificially Intelligent Disaster Risk Classifiers</h3>
+          <span class="year">2021–2023</span>
+        </div>
+        <p class="card-sub">M.Sc. dissertation codebase — PUC-Rio</p>
+        <p>
+          End-to-end supervised learning pipelines and spatial data processing to model and predict
+          household disaster risk in Peru, combining national household surveys with geoprocessed
+          hazard data. Covers feature construction, hyperparameter optimization and evaluation under
+          severe class imbalance.
+        </p>
+        <p>Published in the <em>International Journal of Disaster Risk Reduction</em> (2023, 2025).</p>
+        <ul class="tags">
+          <li>Python</li><li>scikit-learn</li><li>Geoprocessing</li><li>Imbalanced learning</li>
+        </ul>
+        <p class="card-links">
+          <a href="https://github.com/renatoquiliche/Tesis-PUCRio-RenatoQuiliche" rel="noopener">Code&nbsp;↗</a>
+          <a href="https://doi.org/10.1016/j.ijdrr.2023.104109" rel="noopener">Paper&nbsp;↗</a>
+        </p>
+      </article>
+
+      <!-- 3 -->
+      <article class="card" data-tags="genai ml">
+        <div class="card-head">
+          <h3>OntoUML-Stone Evaluation Framework</h3>
+          <span class="year">2026</span>
+        </div>
+        <p class="card-sub">Automated evaluation for an ontology-grounded customer-service chatbot</p>
+        <p>
+          Open-source experimental framework for evaluating LLM-based customer service agents against
+          formal ontologies. Automated experimental pipelines in Python integrate large and small
+          language models with handcrafted and automatically induced ontologies, plus retrieval
+          augmented generation, running on GPU infrastructure.
+        </p>
+        <ul class="tags">
+          <li>LLMs</li><li>Formal ontologies</li><li>RAG</li><li>Python</li><li>OntoUML</li>
+        </ul>
+        <p class="card-links">
+          <a href="https://github.com/renatoquiliche/OntoUML-Stone-Public" rel="noopener">Code&nbsp;↗</a>
+        </p>
+      </article>
+
+      <!-- 4 -->
+      <article class="card" data-tags="policy ml">
+        <div class="card-head">
+          <h3>Curazone — a tool to care for populated areas</h3>
+          <span class="year">2021</span>
+        </div>
+        <p class="card-sub">Spatial COVID-19 risk mapping for economic reactivation</p>
+        <p>
+          Geoprocessing of COVID-19 deaths and affected populations combined with spatial econometrics
+          to identify local contagion patterns, supporting a framework for phased economic reactivation.
+          Published in <em>MDPI Sustainability</em>.
+        </p>
+        <ul class="tags">
+          <li>Spatial econometrics</li><li>Geoprocessing</li><li>Python</li><li>R</li>
+        </ul>
+        <p class="card-links">
+          <a href="https://doi.org/10.3390/su131810092" rel="noopener">Paper&nbsp;↗</a>
+        </p>
+      </article>
+
+      <!-- 5 -->
+      <article class="card" data-tags="policy">
+        <div class="card-head">
+          <h3>Lab Hands — Research Laboratory Dashboard</h3>
+          <span class="year">2023–present</span>
+        </div>
+        <p class="card-sub">Interactive analytics for research group performance</p>
+        <p>
+          Custom interactive dashboards tracking the main indicators of researcher and student
+          performance and scientific production, plus automated information collection and
+          interpretation built on Google Workspace.
+        </p>
+        <ul class="tags">
+          <li>Power BI</li><li>Streamlit</li><li>Python</li><li>Google Workspace</li>
+        </ul>
+      </article>
+
+      <!-- 6 -->
+      <article class="card" data-tags="policy genai">
+        <div class="card-head">
+          <h3>Nationwide Public Policy Mapping Survey</h3>
+          <span class="year">2023–2024</span>
+        </div>
+        <p class="card-sub">UNDP &amp; Government of Brazil</p>
+        <p>
+          Designed and implemented policy surveys targeting municipal, state and federal public officials
+          to assess the quality of risk and disaster management policies, in support of the
+          <em>Plano Nacional de Proteção e Defesa Civil</em>. Combined descriptive analysis of survey data
+          with natural language processing of interview transcripts.
+        </p>
+        <ul class="tags">
+          <li>Survey design</li><li>NLP</li><li>Python</li><li>Policy evaluation</li>
+        </ul>
+      </article>
+
+      <!-- 7 -->
+      <article class="card" data-tags="ml">
+        <div class="card-head">
+          <h3>Data Science Course Materials</h3>
+          <span class="year">2023–2024</span>
+        </div>
+        <p class="card-sub">Teaching assistance — PUC-Rio</p>
+        <p>
+          Practical learning tasks for training and evaluating machine learning models, used in the
+          graduate data science course at PUC-Rio.
+        </p>
+        <ul class="tags">
+          <li>Python</li><li>Machine learning</li><li>Teaching</li>
+        </ul>
+        <p class="card-links">
+          <a href="https://github.com/renatoquiliche/DataScience-PUCRio-FB" rel="noopener">Code&nbsp;↗</a>
+        </p>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ============ PUBLICATIONS ============ -->
+  <section class="section wrap" id="publications">
+    <h2 class="section-title">Selected publications</h2>
+    <ol class="pubs">
+      <li>
+        <span class="pub-year">2025</span>
+        <div>
+          <p class="pub-title">Identifying final demand points for aid in the aftermath of sudden-onset
+            climate-related disasters in Peru: a supervised learning approach</p>
+          <p class="pub-venue">Quiliche Altamirano, R. J., et al. · <em>International Journal of Disaster Risk Reduction</em></p>
+          <a href="https://doi.org/10.1016/j.ijdrr.2025.105593" rel="noopener">10.1016/j.ijdrr.2025.105593&nbsp;↗</a>
+        </div>
+      </li>
+      <li>
+        <span class="pub-year">2023</span>
+        <div>
+          <p class="pub-title">A predictive assessment of households' risk against disasters caused by
+            cold waves using machine learning</p>
+          <p class="pub-venue">Quiliche Altamirano, R. J., et al. · <em>International Journal of Disaster Risk Reduction</em></p>
+          <a href="https://doi.org/10.1016/j.ijdrr.2023.104109" rel="noopener">10.1016/j.ijdrr.2023.104109&nbsp;↗</a>
+        </div>
+      </li>
+      <li>
+        <span class="pub-year">2021</span>
+        <div>
+          <p class="pub-title">Using spatial patterns of COVID-19 to build a framework for economic reactivation</p>
+          <p class="pub-venue">Quiliche Altamirano, R. J., et al. · <em>MDPI Sustainability</em></p>
+          <a href="https://doi.org/10.3390/su131810092" rel="noopener">10.3390/su131810092&nbsp;↗</a>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <!-- ============ SKILLS ============ -->
+  <section class="section wrap" id="skills">
+    <h2 class="section-title">Technical skills</h2>
+    <div class="skill-grid">
+      <div class="skill">
+        <h3>Programming</h3>
+        <p>Python · SQL · R · Julia · LaTeX · Git &amp; GitHub</p>
+      </div>
+      <div class="skill">
+        <h3>Data &amp; ML</h3>
+        <p>Pandas · NumPy · scikit-learn · PySpark · Spark MLlib · Databricks · Power BI · Streamlit</p>
+      </div>
+      <div class="skill">
+        <h3>Statistics &amp; modelling</h3>
+        <p>Predictive modelling · Supervised learning · Hyperparameter optimization · Imbalanced classification · Econometrics · Spatial analysis · System dynamics</p>
+      </div>
+      <div class="skill">
+        <h3>Generative AI</h3>
+        <p>GPT-5 · Gemini · Claude · Retrieval augmented generation · Formal ontologies</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section class="section wrap" id="contact">
+    <h2 class="section-title">Contact</h2>
+    <p class="prose">
+      Open to roles in data science and machine learning engineering, in industry and in academia.
+      The fastest way to reach me is email.
+    </p>
+    <ul class="links big">
+      <li><a href="mailto:renato.quiliche.pe@gmail.com">renato.quiliche.pe@gmail.com</a></li>
+      <li><a href="https://www.linkedin.com/in/renato-quiliche/" rel="noopener">LinkedIn</a></li>
+      <li><a href="https://github.com/renatoquiliche" rel="noopener">GitHub</a></li>
+    </ul>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>&copy; <span id="year">2026</span> Renato J. Quiliche Altamirano · Rio de Janeiro, Brazil</p>
+    <p class="muted">Built as a static site, hosted on GitHub Pages.</p>
+  </div>
+</footer>
+
+<script src="assets/js/main.js"></script>
+</body>
+</html>
