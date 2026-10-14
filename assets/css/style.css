@@ -137,6 +137,52 @@ code {
 
 .hero { padding: 88px 24px 64px; }
 
+/* Full-bleed artwork behind the landing hero. The image's off-white
+   background is blended into the page, and inverted for dark mode. */
+.hero-art {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding-inline: 0;
+  background: var(--bg);
+}
+.hero-art::before {
+  content: "";
+  position: absolute; top: 0; right: 0; bottom: 0; z-index: -1;
+  width: 56%;
+  background: url("../img/hero.jpg") right center / cover no-repeat;
+  mix-blend-mode: darken;
+  -webkit-mask-image: linear-gradient(to right, transparent 10%, #000 45%),
+                      linear-gradient(to bottom, #000 80%, transparent);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(to right, transparent 10%, #000 45%),
+              linear-gradient(to bottom, #000 80%, transparent);
+  mask-composite: intersect;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .hero-art::before {
+    filter: invert(1) hue-rotate(180deg);
+    mix-blend-mode: lighten;
+  }
+}
+:root[data-theme="dark"] .hero-art::before {
+  filter: invert(1) hue-rotate(180deg);
+  mix-blend-mode: lighten;
+}
+/* Narrow screens: the art moves below the call-to-action as a strip. */
+@media (max-width: 1180px) {
+  .hero-art { padding-bottom: 240px; }
+  .hero-art::before {
+    width: min(100%, 520px); top: auto; height: 280px;
+    background-size: auto 280px;
+    background-position: right bottom;
+    -webkit-mask-image: linear-gradient(to bottom, transparent, #000 30%, #000 85%, transparent),
+                        linear-gradient(to right, transparent, #000 35%);
+    mask-image: linear-gradient(to bottom, transparent, #000 30%, #000 85%, transparent),
+                linear-gradient(to right, transparent, #000 35%);
+  }
+}
+
 .eyebrow {
   margin: 0 0 12px;
   font-size: 13px; letter-spacing: .1em; text-transform: uppercase;
