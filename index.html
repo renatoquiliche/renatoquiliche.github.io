@@ -104,9 +104,42 @@
       <button class="chip" data-filter="bigdata" type="button">Big data</button>
       <button class="chip" data-filter="genai" type="button">Generative AI</button>
       <button class="chip" data-filter="policy" type="button">Policy &amp; analytics</button>
+      <button class="chip" data-filter="finance" type="button">Forecasting &amp; finance</button>
     </div>
 
     <div class="cards" id="project-list">
+
+      <!-- 0 -->
+      <article class="card" data-tags="finance ml">
+        <div class="card-head">
+          <h3>Bitcoin Mining as a Real Option</h3>
+          <span class="year">2026</span>
+        </div>
+        <p class="card-sub">Time-series forecasting and decision analysis for a wind-farm investment</p>
+        <p>
+          Replicated the real-options valuation of Bastian-Pinto et al. (2021), where a Brazilian wind
+          farm can sell its early energy or mine Bitcoin, and verified the port path-by-path against the
+          authors' code. Replaced the paper's GBM with a <strong>bagged power-law + halving-cycle</strong>
+          forecast (STL, block bootstrap, mean reversion) and scored both against the realized 2019–2025
+          prices.
+        </p>
+        <p>
+          Three models gave three different investment recommendations; the realized path shows why the
+          starting-level assumption mattered more than the stochastic process.
+        </p>
+        <ul class="metrics">
+          <li><b>0.25</b><span>CRPS (vs 0.38)</span></li>
+          <li><b>96%</b><span>90% coverage</span></li>
+          <li><b>50K</b><span>MC paths</span></li>
+        </ul>
+        <ul class="tags">
+          <li>R</li><li>Monte Carlo</li><li>Real options</li><li>Bagging</li><li>Shiny</li>
+        </ul>
+        <p class="card-links">
+          <a href="projects/btc-mining-real-options.html">Read the write-up&nbsp;→</a>
+          <a href="https://doi.org/10.1016/j.rser.2020.110520" rel="noopener">Original paper&nbsp;↗</a>
+        </p>
+      </article>
 
       <!-- 1 -->
       <article class="card" data-tags="ml bigdata">
@@ -306,7 +339,7 @@
       </div>
       <div class="skill">
         <h3>Statistics &amp; modelling</h3>
-        <p>Predictive modelling · Supervised learning · Hyperparameter optimization · Imbalanced classification · Econometrics · Spatial analysis · System dynamics</p>
+        <p>Predictive modelling · Supervised learning · Hyperparameter optimization · Imbalanced classification · Time-series forecasting · Monte Carlo simulation · Real options · Econometrics · Spatial analysis · System dynamics</p>
       </div>
       <div class="skill">
         <h3>Generative AI</h3>

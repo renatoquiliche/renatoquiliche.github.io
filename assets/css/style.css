@@ -362,6 +362,87 @@ code {
 .site-footer p { margin: 0; }
 .muted { color: var(--text-muted); margin-top: 4px !important; }
 
+/* ---------- project pages ---------- */
+
+.page-hero { padding-bottom: 32px; }
+.eyebrow .back { color: inherit; text-decoration: none; }
+.eyebrow .back:hover { color: var(--accent); }
+
+.metrics-wide { flex-wrap: wrap; gap: 18px 32px; margin-top: 30px; }
+.tags-inline { margin-top: 4px; }
+
+.sub { margin: 36px 0 12px; font-size: 17px; letter-spacing: -.01em; }
+
+/* Figures are rendered on white, so keep a white frame in dark mode too. */
+.fig { margin: 28px 0 8px; }
+.fig-frame {
+  display: block;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px;
+  box-shadow: var(--shadow);
+}
+.fig-frame img { display: block; width: 100%; }
+.fig figcaption {
+  margin-top: 10px; max-width: 80ch;
+  font-size: 14px; color: var(--text-muted);
+}
+@media (max-width: 640px) {
+  .fig-wide .fig-frame { overflow-x: auto; }
+  .fig-wide .fig-frame img { width: 640px; max-width: none; }
+}
+
+.eq {
+  margin: 18px 0 10px;
+  padding: 6px 20px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow-x: auto;
+}
+.eq .katex-display { margin: .9em 0; overflow-x: auto; overflow-y: hidden; }
+.eq-note { font-size: 15px; color: var(--text-muted); }
+
+.list { margin: 0; padding-left: 1.2em; }
+.list li { margin-bottom: 10px; }
+
+.cols-3 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+.callout {
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--callout, var(--accent));
+  border-radius: var(--radius);
+  padding: 16px 18px;
+}
+.callout h3 { margin: 0 0 6px; font-size: 14px; }
+.callout p { margin: 0; font-size: 14.5px; color: var(--text-muted); }
+.c-a { --callout: #3a6fd8; }
+.c-b { --callout: #e0663a; }
+.c-c { --callout: #1fa37a; }
+
+.takeaways {
+  margin-top: 28px; max-width: 68ch;
+  background: var(--accent-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 22px;
+}
+.takeaways h3 {
+  margin: 0 0 10px;
+  font-size: 13px; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--accent);
+}
+.takeaways ol { margin: 0; padding-left: 1.2em; }
+.takeaways li { margin-bottom: 8px; }
+
+.page-links { margin-top: 24px !important; }
+
 @media print {
   .site-header, .filters, .cta-row, .theme-toggle { display: none; }
   .card { break-inside: avoid; box-shadow: none; }

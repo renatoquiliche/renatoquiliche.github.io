@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bitcoin Mining as a Real Option — Renato Quiliche</title>
+<meta name="description" content="Replication and extension of Bastian-Pinto et al. (2021): valuing Bitcoin mining as a hedge for a Brazilian wind farm, with a bagged power-law + halving-cycle forecast in place of the paper's GBM, scored against what actually happened in 2019–2025.">
+<meta name="author" content="Renato J. Quiliche Altamirano">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="Bitcoin Mining as a Real Option — forecasting and decision analysis">
+<meta property="og:description" content="Three models, three recommendations, and one realized path: a real-options valuation of Bitcoin mining at a wind farm, checked against 2019–2025.">
+<meta property="og:url" content="https://renatoquiliche.github.io/projects/btc-mining-real-options.html">
+<meta property="og:image" content="https://renatoquiliche.github.io/assets/img/btc/decision-tree.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<link rel="stylesheet" href="../assets/css/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <nav class="nav wrap" aria-label="Main">
+    <a class="brand" href="../index.html">RQ</a>
+    <ul class="nav-links">
+      <li><a href="#problem">Problem</a></li>
+      <li><a href="#decision-tree">Decision tree</a></li>
+      <li><a href="#forecast">Forecast</a></li>
+      <li><a href="#findings">Findings</a></li>
+      <li><a href="../index.html#projects">All projects</a></li>
+    </ul>
+    <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle colour theme">
+      <span aria-hidden="true">◐</span>
+    </button>
+  </nav>
+</header>
+
+<main id="main">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero page-hero wrap" id="top">
+    <p class="eyebrow"><a class="back" href="../index.html#projects">← Projects</a> · 2026</p>
+    <h1>Bitcoin Mining as a Real Option</h1>
+    <p class="role">Time-series forecasting and decision analysis for a renewable-energy investment</p>
+    <p class="lede">
+      A wind farm in Brazil can sell its early energy on the spot market or burn it mining Bitcoin.
+      I replicated the real-options valuation of
+      <a href="https://doi.org/10.1016/j.rser.2020.110520" rel="noopener">Bastian-Pinto et&nbsp;al. (2021)</a>,
+      replaced its geometric Brownian motion with a bagged power-law&nbsp;+ halving-cycle forecast,
+      and then checked every recommendation against what actually happened from 2019 to 2025.
+    </p>
+    <ul class="metrics metrics-wide">
+      <li><b>0.25</b><span>CRPS, bagged model</span></li>
+      <li><b>0.38</b><span>CRPS, paper's MC</span></li>
+      <li><b>p&nbsp;=&nbsp;0.004</b><span>Diebold–Mariano, rolling</span></li>
+      <li><b>5.72</b><span>USD M, replicated (paper 5.74)</span></li>
+    </ul>
+    <ul class="tags tags-inline">
+      <li>R</li><li>Monte Carlo</li><li>Real options</li><li>Bagging</li><li>STL</li>
+      <li>Block bootstrap</li><li>Shiny</li><li>Forecast evaluation</li>
+    </ul>
+  </section>
+
+  <!-- ============ PROBLEM ============ -->
+  <section class="section wrap" id="problem">
+    <h2 class="section-title">The problem</h2>
+    <div class="prose">
+      <p>
+        A wind farm has won a regulated power contract that starts in six years. The firm can wait, or
+        build now and use the plant early. Building takes two years; in the four years that follow,
+        the energy is not yet committed, so it can be sold on the spot market or used on site to mine
+        Bitcoin — if the firm has bought mining machines. Miners take three months to install and are
+        obsolete after two years, so there are two purchase dates: September 2021 and September 2023.
+      </p>
+      <p>
+        With miners installed, the operator picks the better use of the energy every month. Each
+        purchase is therefore a bundle of 24 monthly options to swap electricity revenue for mining
+        revenue, bought at the price of the machines. Mining revenue per kWh depends on the
+        Bitcoin price&nbsp;<span class="m">S_t</span>, the network difficulty&nbsp;<span class="m">D_t</span>
+        and the block reward&nbsp;<span class="m">R_t</span>, which the protocol halves roughly every four years:
+      </p>
+    </div>
+
+    <div class="eq">
+      $$B_t = \kappa\,R_t\,X_t,\qquad X_t = \frac{S_t}{D_t},\qquad \kappa = \frac{3.6\times10^{6}\,H}{2^{32}\,W}$$
+      $$\text{mine in month } t \iff 1000\,\rho\,B_t > P_t$$
+      $$G_j = \sum_{t\in\text{window } j}\frac{(1-\tau)\,Q^{M}_t\,\big(1000\,\rho\,B_t - P_t\big)^{+}}{(1+r)^t} \;-\; \frac{K}{(1+k)^{s_j}}$$
+    </div>
+    <p class="prose eq-note">
+      <span class="m">H</span> and <span class="m">W</span> are the miner's hash rate and power,
+      <span class="m">P_t</span> the spot electricity price (a mean-reverting process, as in the paper),
+      <span class="m">\rho = 0.85</span> the share of energy reaching the miners,
+      <span class="m">K</span> the miner price paid at month <span class="m">s_j \in \{22, 46\}</span>.
+      The four strategies follow by addition: <span class="m">V_{S_1} = V_{S_0} + G_1</span>,
+      <span class="m">V_{S_2} = V_{S_0} + G_1 + G_2</span>, <span class="m">V_{S_3} = V_{S_0} + G_2</span>.
+    </p>
+  </section>
+
+  <!-- ============ DECISION TREE ============ -->
+  <section class="section wrap" id="decision-tree">
+    <h2 class="section-title">Three models, three recommendations</h2>
+    <div class="prose">
+      <p>
+        All three models share the paper's cash-flow model and decisions; they differ only in how the
+        uncertainty of mining revenue is described. <strong>Model&nbsp;A</strong> is the paper's GBM as
+        published. <strong>Model&nbsp;B</strong> adds the block-reward halving, which the paper omits.
+        <strong>Model&nbsp;C</strong> replaces the GBM with the bagged forecast below. Each is valued
+        on 50,000 simulated paths; the last two columns run the same model on the single path that
+        actually occurred.
+      </p>
+    </div>
+
+    <figure class="fig fig-wide">
+      <a class="fig-frame" href="../assets/img/btc/decision-tree.png" title="Open full size">
+        <img src="../assets/img/btc/decision-tree.png" width="2580" height="1590"
+             alt="Decision tree with three decision nodes (build now in Nov 2019, buy miners in Sep 2021, buy miners in Sep 2023) leading to four strategies. Expected NPV in USD million (probability of a loss): S2 mine in years 3–6: Model A 5.72 (15%), Model B −0.64 (65%), Model C 1.72 (45%), actual 4.56 same miner and 10.61 newest miner. S1 mine in years 3–4: 3.59 (24%), 0.64 (50%), −0.02 (59%), actual 4.78 and 7.59. S3 mine in years 5–6: 3.63 (21%), 0.22 (55%), 3.23 (28%), actual 0.27 and 3.51. S0 sell power only: 1.50 (38%) under all models, actual 0.49. Waiting has NPV 0.">
+      </a>
+      <figcaption>
+        Decision tree. Squares are decisions; each branch ends in a strategy. Expected NPV in USD
+        million (probability of a loss) under each model, and the NPV realized with actual prices,
+        using either the paper's miner or the newest miner on sale at each date. Shaded cell = best
+        strategy in that column.
+      </figcaption>
+    </figure>
+
+    <div class="cols-3">
+      <div class="callout c-a">
+        <h3>Model A · GBM, as published</h3>
+        <p>Buy at both dates (S2): 5.72&nbsp;M, 15% chance of a loss — the paper's answer.</p>
+      </div>
+      <div class="callout c-b">
+        <h3>Model B · GBM with halving</h3>
+        <p>Never buy (S0): 1.50&nbsp;M. The halving alone reverses the paper's case for mining.</p>
+      </div>
+      <div class="callout c-c">
+        <h3>Model C · bagged, with halving</h3>
+        <p>Skip 2021, buy in 2023 (S3): 3.23&nbsp;M — a strategy the paper did not consider.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FORECAST ============ -->
+  <section class="section wrap" id="forecast">
+    <h2 class="section-title">Forecasting Bitcoin: bagged power law + halving cycle</h2>
+    <div class="prose">
+      <p>
+        A GBM path never returns to a trend, and its median is a straight line on the log scale. The
+        model I used instead treats the log series as <em>trend-stationary</em>: it reverts, at a
+        fitted speed, to a power law in the age of the network, with a deterministic swing that
+        follows the four-year halving cycle. Bagging then re-estimates the whole model on
+        block-bootstrapped copies of the history and pools the simulated paths.
+      </p>
+    </div>
+
+    <figure class="fig">
+      <a class="fig-frame" href="../assets/img/btc/forecast-vs-realized.jpg" title="Open full size">
+        <img src="../assets/img/btc/forecast-vs-realized.jpg" width="1280" height="775"
+             alt="Two fan charts of the Bitcoin price on a log scale, both forecast from November 2019 and compared with the realized price to late 2025. Left, bagged power law plus cycle: the median follows the 2021 peak, 2022 trough and 2024 rise; CRPS 0.25, 90% coverage 96%, out-of-sample R squared 0.93, shape correlation 0.55. Right, the paper's Monte Carlo: a straight-line median inside a very wide fan; CRPS 0.38, 90% coverage 100%, out-of-sample R squared 0.91, no shape.">
+      </a>
+      <figcaption>
+        Forecasts of the Bitcoin price from November 2019 (50% and 90% bands, median line) against the
+        realized price (black). Left: bagged power law + cycle. Right: the paper's Monte Carlo. Lower
+        CRPS is better.
+      </figcaption>
+    </figure>
+
+    <h3 class="sub">The model</h3>
+    <div class="prose">
+      <p>
+        For a log series <span class="m">y_t</span> (the Bitcoin price for the forecasting tests,
+        <span class="m">\ln X_t</span> inside the valuation), with <span class="m">A_t</span> the age of the
+        network in days:
+      </p>
+    </div>
+    <div class="eq">
+      $$y_t = a + b\ln A_t + u_t$$
+      $$u_t = c + \phi\,u_{t-1} + \sum_{j=1}^{J}\Big[\gamma_j\sin(2\pi j\,\theta_t) + \delta_j\cos(2\pi j\,\theta_t)\Big] + \varepsilon_t$$
+      $$\theta_t = \frac{d_t - \tau_{i}}{\tau_{i+1} - \tau_{i}} \in [0,1),\qquad \tau_i \le d_t < \tau_{i+1}$$
+    </div>
+    <p class="prose eq-note">
+      The power law gives a growth rate <span class="m">b/A_t</span> that slows as the network ages.
+      <span class="m">\phi</span> sets how fast deviations from the trend fade — a discretized
+      Ornstein–Uhlenbeck process with half-life <span class="m">\ln 0.5/\ln\phi</span> — and
+      <span class="m">\theta_t</span> is the position of month <span class="m">t</span> between two halvings
+      <span class="m">\tau_i</span>, projected from the protocol's 210,000-block schedule so no future
+      dates leak in. All coefficients are estimated by least squares; future shocks are drawn from the
+      fitted residuals.
+    </p>
+
+    <h3 class="sub">Bagging</h3>
+    <div class="eq">
+      $$y_t = \widehat T_t + \widehat S_t + \widehat R_t \qquad\text{(STL)}$$
+      $$y^{*b}_t = \widehat T_t + \widehat S_t + R^{*b}_t \qquad\text{(moving-block bootstrap)}$$
+      $$\widehat F_{T+h}(x) = \frac{1}{BK}\sum_{b=1}^{B}\sum_{k=1}^{K}\mathbb{1}\Big\{\exp\big(y^{*(b,k)}_{T+h}\big)\le x\Big\}$$
+    </div>
+    <p class="prose eq-note">
+      The remainder of an STL decomposition is resampled in 24-month blocks to build
+      <span class="m">B = 30</span> replicates; the model is refitted on each and
+      <span class="m">K</span> paths are simulated per member. The pooled distribution mixes innovation
+      uncertainty (within members) with estimation uncertainty (across members). Inside the valuation,
+      revenue after a purchase at month <span class="m">s</span> follows
+      <span class="m">B_t = b_0\,(X_t/X_s)\,(R_t/12.5)</span>.
+    </p>
+
+    <h3 class="sub">How it was evaluated</h3>
+    <div class="prose">
+      <ul class="list">
+        <li>Scored with the <strong>CRPS</strong> on the log scale, which rewards calibration and sharpness
+          together, plus interval coverage and an out-of-sample R² of the median path, including a
+          detrended "shape" R² that a straight-line forecast cannot game.</li>
+        <li>A <strong>no-hindsight</strong> set-up (train to Nov 2016, forecast to Nov 2019) for choosing
+          settings, and a <strong>rolling</strong> test over 17 forecast origins (2016–2024, 24 months ahead)
+          with <strong>Diebold–Mariano</strong> tests using a Newey–West variance.</li>
+        <li>An ablation that adds one ingredient at a time to the paper's GBM: power-law drift, cycle drift,
+          mean reversion, bagging. Mean reversion is the largest single gain (rolling CRPS 0.40&nbsp;→&nbsp;0.31);
+          bagging adds a further significant gain (0.31&nbsp;→&nbsp;0.25, p&nbsp;=&nbsp;0.001) and fixes
+          calibration (90% coverage 79%&nbsp;→&nbsp;95%).</li>
+        <li>A grid of 266 configurations across five bagged learners (ETS, ARIMA, cycle regression, XGBoost,
+          power law + cycle), explored in an interactive Shiny lab. Every power-law configuration beat the
+          paper's Monte Carlo on both test periods; no other learner did.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ FINDINGS ============ -->
+  <section class="section wrap" id="findings">
+    <h2 class="section-title">What actually happened</h2>
+    <div class="prose">
+      <p>
+        The 72 months of the analysis are now in the past, so each recommendation can be checked on the
+        realized prices. Mining beat selling power in all 24 months of 2021–2023 and in 21 of 24 months of
+        2023–2025. The first purchase was the profitable one: it gained USD&nbsp;4.28&nbsp;M with the paper's
+        miner and 7.10&nbsp;M with the newest — above the 95th percentile of Models B and C.
+      </p>
+      <p>
+        <strong>The paper's recommendation did best, for the wrong reasons.</strong> All three models assume
+        that mining revenue restarts at its November 2019 level at each purchase. By September 2021 the
+        price-to-difficulty ratio was 3.9 times that level. Model&nbsp;A's two errors partly cancel — ignoring
+        the halving overstates revenue by 2×, the stale starting level understates it by 3.9× — while Models
+        B and C fix the first error and keep the second.
+      </p>
+      <p>
+        <strong>After a purchase, the bagged model described revenue best.</strong> Over 2023–2025 actual
+        revenue fell to 51% of its starting value; the bagged median was 28% against 12% for the GBM with
+        halving, and its starting level at the second purchase (0.074 USD/kWh) was closest to the actual 0.082.
+      </p>
+    </div>
+
+    <div class="takeaways">
+      <h3>Takeaways</h3>
+      <ol>
+        <li>A better forecaster does not guarantee a better decision: the assumption about the
+          <em>starting level</em> of revenue, shared by all three models, mattered more than the
+          stochastic process.</li>
+        <li>Omitted structure (the halving) can reverse a published recommendation on its own.</li>
+        <li>The bagged model's recommendation is sensitive to its settings, which were tuned on price
+          forecasts rather than on the ratio that drives revenue — reported as a limitation, not hidden.</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============ REPLICATION ============ -->
+  <section class="section wrap" id="replication">
+    <h2 class="section-title">Replication</h2>
+    <div class="prose">
+      <ul class="list">
+        <li>Line-by-line port of the authors' Monte Carlo, verified against their original notebook with a
+          common seed: all 50,000&nbsp;×&nbsp;3 NPV paths agree to 0.00&nbsp;USD.</li>
+        <li>The published Table&nbsp;5 (1.51 / 3.60 / 5.74&nbsp;M) is reproduced as 1.50 / 3.59 / 5.72&nbsp;M.
+          Because the authors set no seed, I reran the model under 100 seeds (5 million paths) to show the
+          published values sit inside the seed-to-seed distribution.</li>
+        <li>Documented nine discrepancies between the paper's text and the code that produced its
+          results (among them the anticipation cost and the mining capacity) and reran the model with the
+          text values under common random numbers to measure their effect. Also flagged a σ²/2 drift
+          correction that is applied twice.</li>
+        <li>Re-estimated the stochastic processes (ADF and variance-ratio tests, GBM and mean-reverting
+          calibration) from the authors' data, and rebuilt the realized path from public Bitcoin, difficulty,
+          CCEE spot-price and exchange-rate series.</li>
+      </ul>
+    </div>
+    <p class="card-links page-links">
+      <a href="https://doi.org/10.1016/j.rser.2020.110520" rel="noopener">Original paper&nbsp;↗</a>
+      <!-- TODO: add repo link once the code is pushed -->
+    </p>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>&copy; <span id="year">2026</span> Renato J. Quiliche Altamirano · <a href="../index.html">Back to portfolio</a></p>
+    <p class="muted">Based on Bastian-Pinto, Araujo, Brandão &amp; Gomes (2021), <em>Renewable and Sustainable Energy Reviews</em> 138, 110520.</p>
+  </div>
+</footer>
+
+<script src="../assets/js/main.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>
+  /* Render $$…$$ display maths, and inline maths in elements marked class="m". */
+  window.addEventListener("load", function () {
+    if (!window.katex || !window.renderMathInElement) return;
+    renderMathInElement(document.getElementById("main"), {
+      delimiters: [{ left: "$$", right: "$$", display: true }],
+      throwOnError: false
+    });
+    document.querySelectorAll(".m").forEach(function (el) {
+      katex.render(el.textContent, el, { throwOnError: false });
+    });
+  });
+</script>
+</body>
+</html>
