@@ -155,28 +155,33 @@
           <h3>Distributed Disaster-Risk Classification on Databricks</h3>
           <span class="year">2026</span>
         </div>
-        <p class="card-sub">Scaling an M.Sc. dissertation model into a production-shaped Spark pipeline</p>
+        <p class="card-sub">Porting a published model to Spark MLlib, then benchmarking it against AutoML and the original</p>
         <p>
-          Re-engineered my dissertation modelling stack as a distributed pipeline on Databricks, moving
-          from single-node Python to Spark MLlib over <strong>101K household records</strong> and
+          Ported my published flood and landslide risk classifiers from single-node XGBoost to
+          Spark MLlib on Databricks serverless, over <strong>101K household records</strong> and
           <strong>112 features</strong>. The pipeline chains VectorAssembler → RobustScaler →
-          GBTClassifier, with cost-sensitive class weighting for a 1.4% positive rate and hyperparameter
-          search via <code>TrainValidationSplit</code>.
+          GBTClassifier, with cost-sensitive class weights for 1.4% and 5.4% positive rates, a grid
+          search via <code>TrainValidationSplit</code>, and imbalance-aware metrics (MCC, G-Mean,
+          GIBA<sub>α</sub>) computed with Spark aggregations.
         </p>
         <p>
-          Evaluation is imbalance-aware and computed with distributed Spark SQL aggregations
-          (MCC, G-Mean, balanced accuracy, GIBA<sub>α</sub>). The fitted <code>PipelineModel</code> is
-          persisted to Unity Catalog Volumes for reproducible reload and batch scoring.
+          Benchmarked three approaches on the same 2021 hold-out: the published model, the Spark
+          baseline and <strong>FLAML AutoML</strong>. AutoML ranked households best but missed more
+          affected ones at the default threshold; the published model, tuned on GIBA, stayed the most
+          balanced. The data is small, so the port shows the platform and its constraints, not a speed-up.
         </p>
         <ul class="metrics">
-          <li><b>0.81</b><span>AUC</span></li>
-          <li><b>0.67</b><span>Sensitivity</span></li>
-          <li><b>0.83</b><span>Specificity</span></li>
+          <li><b>0.87</b><span>Spark AUC (landslides)</span></li>
+          <li><b>0.91</b><span>AutoML AUC (landslides)</span></li>
+          <li><b>28K</b><span>hold-out households</span></li>
         </ul>
         <ul class="tags">
-          <li>PySpark</li><li>Spark MLlib</li><li>Databricks</li><li>Spark SQL</li><li>Unity Catalog</li>
+          <li>PySpark</li><li>Spark MLlib</li><li>Databricks</li><li>Unity Catalog</li><li>AutoML</li><li>FLAML</li>
         </ul>
-        <!-- TODO: add repo link once the notebook is pushed -->
+        <p class="card-links">
+          <a href="https://github.com/renatoquiliche/peru-disaster-risk-spark" rel="noopener">Code&nbsp;↗</a>
+          <a href="https://doi.org/10.1016/j.ijdrr.2025.105593" rel="noopener">Paper&nbsp;↗</a>
+        </p>
       </article>
 
       <!-- 2 -->

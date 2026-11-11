@@ -11,7 +11,7 @@ from research prototype to distributed production pipeline.
 | Project | Topic |
 |---|---|
 | [Bitcoin Mining as a Real Option](https://renatoquiliche.github.io/projects/btc-mining-real-options.html) | Time-series forecasting (bagged power law + halving cycle) and real-options valuation of a wind-farm investment, scored against 2019–2025 outcomes |
-| Distributed Disaster-Risk Classification on Databricks | Spark MLlib pipeline over 101K household records |
+| [Distributed Disaster-Risk Classification on Databricks](https://github.com/renatoquiliche/peru-disaster-risk-spark) | Spark MLlib pipeline over 101K household records, benchmarked against AutoML and the published model |
 | [Artificially Intelligent Disaster Risk Classifiers](https://github.com/renatoquiliche/Tesis-PUCRio-RenatoQuiliche) | M.Sc. dissertation: supervised learning for household disaster risk in Peru |
 | [OntoUML-Stone Evaluation Framework](https://github.com/renatoquiliche/OntoUML-Stone-Public) | Automated evaluation of LLM customer-service agents against formal ontologies |
 | Curazone | Spatial COVID-19 risk mapping for economic reactivation |
