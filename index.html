@@ -161,14 +161,15 @@
           Spark MLlib on Databricks serverless, over <strong>101K household records</strong> and
           <strong>112 features</strong>. The pipeline chains VectorAssembler → RobustScaler →
           GBTClassifier, with cost-sensitive class weights for 1.4% and 5.4% positive rates, a grid
-          search via <code>TrainValidationSplit</code>, and imbalance-aware metrics (MCC, G-Mean,
-          GIBA<sub>α</sub>) computed with Spark aggregations.
+          search scored on the paper's own objective (GIBA), and imbalance-aware metrics (MCC,
+          G-Mean, GIBA) computed with Spark aggregations.
         </p>
         <p>
           Benchmarked three approaches on the same 2021 hold-out: the published model, the Spark
-          baseline and <strong>FLAML AutoML</strong>. AutoML ranked households best but missed more
-          affected ones at the default threshold; the published model, tuned on GIBA, stayed the most
-          balanced. The data is small, so the port shows the platform and its constraints, not a speed-up.
+          baseline and <strong>FLAML AutoML</strong>, all tuned on the same objective. AutoML matched
+          the published model (GIBA 0.64 vs 0.62 for floods, 0.66 vs 0.66 for landslides); the
+          4-combination Spark grid trailed both. The data is small, so the port shows the platform
+          and its constraints, not a speed-up.
         </p>
         <ul class="metrics">
           <li><b>0.87</b><span>Spark AUC (landslides)</span></li>
